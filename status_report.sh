@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WEBHOOK_FILE="$HOME/.config/discord_webhooks/status"
+WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
 [ ! -f "$WEBHOOK_FILE" ] && { echo "Webhook file missing"; exit 1; }
 WEBHOOK=$(<"$WEBHOOK_FILE")
 
