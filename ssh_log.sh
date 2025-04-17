@@ -7,7 +7,7 @@ if [ -n "$SSH_CONNECTION" ]; then
   SERVER_IP=$(hostname -I | awk '{print $1}')
   USERNAME=$(whoami)
   TIME=$(date '+%Y-%m-%d %H:%M:%S')
-  WEBHOOK_FILE="/home/$USERNAME/.config/discord_webhooks/pi"
+  WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
   
   [ -f "$WEBHOOK_FILE" ] || exit 0
   WEBHOOK_URL=$(cat "$WEBHOOK_FILE")
