@@ -1,5 +1,8 @@
 #!/bin/bash
 LOGFILE="/tmp/ssh_alert_debug.log"
+echo -e "\n--- ENV @ $(date) ---" >> "$LOGFILE"
+env >> "$LOGFILE"
+
 echo "SSH alert script ran at $(date)" >> "$LOGFILE"
 if [ -n "$SSH_CONNECTION" ]; then
   echo "registered SSH connection!" >> "$LOGFILE"
@@ -8,13 +11,15 @@ if [ -n "$SSH_CONNECTION" ]; then
   SERVER_IP=$(hostname -I | awk '{print $1}')
   USERNAME=$(whoami)
   TIME=$(date '+%Y-%m-%d %H:%M:%S')
+  RAND=$RANDOM
   WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
   
   echo "Reading webhook file: $WEBHOOK_FILE" >> "$LOGFILE"
 
   if [ ! -f "$WEBHOOK_FILE" ]; then
     echo "Webhook file not found" >> "$LOGFILE"
-
+    exit 0
+  fi
   [ -f "$WEBHOOK_FILE" ] || exit 0
   WEBHOOK_URL=$(cat "$WEBHOOK_FILE")
   echo "Webhook url: $WEBHOOK_URL" >> "$LOGFILE"
@@ -23,7 +28,8 @@ if [ -n "$SSH_CONNECTION" ]; then
 User: $USERNAME
 From: $CLIENT_IP
 To: $SERVER_IP
-Time: $TIME"
+Time: $TIME
+ID: $RAND"
 
   echo "Sending message..." >> "$LOGFILE"
 
