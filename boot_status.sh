@@ -20,7 +20,7 @@ elif [ "$HOUR" -ge 18 ] && [ "$HOUR" -lt 24 ]; then
 else
   GREETING="Damn its late, go to sleep!"
 fi
-MESSAGE="[$TIME]\n$GREETING\n$USER@$HOST waking up!\nMy IP is $IP and my SSH Port is: $PORT"
+MESSAGE="---Waking up!---\n[$TIME]\n$GREETING\n$USER@$HOST waking up!\nMy IP is $IP and my SSH Port is: $PORT"
 curl -s -H "Content-Type: application/json" \
      -X POST \
      -d "{\"username\": \"$HOST\", \"content\": \"$MESSAGE\"}" \

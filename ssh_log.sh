@@ -8,10 +8,11 @@ if [ -n "$SSH_CONNECTION" ]; then
   echo "registered SSH connection!" >> "$LOGFILE"
   HOSTNAME=$(hostname)
   CLIENT_IP=$(echo $SSH_CONNECTION | awk '{print $1}')
-  SERVER_IP=$(hostname -I | awk '{print $1}')
+  SERVER_IP=$(echo "$SSH_CONNECTION" | awk '{print $3}')
   SERVER_PORT=$(echo "$SSH_CONNECTION" | awk '{print $4}')
-  USERNAME=$(whoami)
+  USER=$(whoami)
   TIME=$(date '+%Y-%m-%d %H:%M:%S')
+  HOUR=$(date +%H)
   RAND=$RANDOM
   WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
 
@@ -25,14 +26,23 @@ if [ -n "$SSH_CONNECTION" ]; then
   WEBHOOK_URL=$(cat "$WEBHOOK_FILE")
   echo "Webhook url: $WEBHOOK_URL" >> "$LOGFILE"
 
-  MESSAGE="[$HOSTNAME SSH ALERT]
+  if [ "$HOUR" -ge 5 ] && [ "$HOUR" -lt 12 ]; then
+    GREETING="Uh Oh, incoming call from the boss!"
+  elif [ "$HOUR" -ge 12 ] && [ "$HOUR" -lt 18 ]; then
+    GREETING="Interrupting my afternoon tea smh"
+  elif [ "$HOUR" -ge 18 ]; then
+    GREETING="Evening! What can I help ya with"
+  else
+    GREETING="Im tryna sleep, go awayyyyy"
+  fi
 
-User: $USERNAME
-From: $CLIENT_IP
-To: $SERVER_IP
-Time: $TIME
+  MESSAGE="---SSH request detected---
+$TIME
+$GREETING
+SSHing from: $CLIENT_IP
+SSHing into: $SERVER_IP
 Port: $SERVER_PORT
-ID: $RAND"
+"
 
   # Escape newlines for JSON
   MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
