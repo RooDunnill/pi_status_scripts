@@ -1,9 +1,9 @@
 #!/bin/bash
+LOGFILE="/tmp/main_status.log"
 
 WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
 [ ! -f "$WEBHOOK_FILE" ] && { echo "Webhook file missing"; exit 1; }
 WEBHOOK=$(<"$WEBHOOK_FILE")
-
 HOST=$(hostname)
 IP=$(hostname -I | awk '{print $1}')
 [ -z "$IP" ] && IP="unknown"
@@ -52,7 +52,7 @@ EOF
 
 # Escape for JSON
 MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
-
+echo "Webhook path: $WEBHOOK" >> "$LOGFILE"
 curl -s -H "Content-Type: application/json" \
   -X POST \
   -d "{\"username\": \"$TITLE\", \"content\": \"$MESSAGE_ESCAPED\"}" \
