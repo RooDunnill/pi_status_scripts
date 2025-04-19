@@ -4,8 +4,10 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/home/YOUR_USERNAME/pi_boot_status/boot_status.sh
 Type=oneshot
+User=__USER__
+Environment=HOME=__HOME__
+ExecStart=__HOME__/scripts/pi_status_scripts/boot_status.sh
 
 [Install]
 WantedBy=multi-user.target

@@ -1,5 +1,9 @@
 #!/bin/bash
-LOGFILE="/tmp/ssh_alert_debug.log"
+LOGFILE="/tmp/ssh_alert_debug_$(whoami).log"
+if [ -e "$LOGFILE" ] && [ ! -w "$LOGFILE" ]; then
+  rm -f "$LOGFILE"
+fi
+exec 2>>"$LOGFILE"
 echo -e "\n--- ENV @ $(date) ---" >> "$LOGFILE"
 env >> "$LOGFILE"
 
