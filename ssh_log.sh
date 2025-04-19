@@ -11,14 +11,14 @@ echo "SSH alert script ran at $(date)" >> "$LOGFILE"
 if [ -n "$SSH_CONNECTION" ]; then
   echo "registered SSH connection!" >> "$LOGFILE"
   HOSTNAME=$(hostname)
-  CLIENT_IP=$(echo $SSH_CONNECTION | awk '{print $1}')
-  SERVER_IP=$(echo "$SSH_CONNECTION" | awk '{print $3}')
-  SERVER_PORT=$(echo "$SSH_CONNECTION" | awk '{print $4}')
+  CLIENT_IP=$(echo "$SSH_CONNECTION" | awk '{print $1}')      #finds the computers ip
+  SERVER_IP=$(echo "$SSH_CONNECTION" | awk '{print $3}')      #finds the pis ip
+  SERVER_PORT=$(echo "$SSH_CONNECTION" | awk '{print $4}')    #finds the ssh port, normally 22
   USER=$(whoami)
   TIME=$(date '+%Y-%m-%d %H:%M:%S')
   HOUR=$(date +%H)
   RAND=$RANDOM
-  WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"
+  WEBHOOK_FILE="$HOME/.config/discord_webhooks/pi"        #finds the webhook for discord
 
   echo "Reading webhook file: $WEBHOOK_FILE" >> "$LOGFILE"
 
@@ -27,7 +27,7 @@ if [ -n "$SSH_CONNECTION" ]; then
     exit 0
   fi
 
-  WEBHOOK_URL=$(cat "$WEBHOOK_FILE")
+  WEBHOOK_URL=$(cat "$WEBHOOK_FILE")                 
   echo "Webhook url: $WEBHOOK_URL" >> "$LOGFILE"
 
   if [ "$HOUR" -ge 5 ] && [ "$HOUR" -lt 12 ]; then
@@ -39,7 +39,7 @@ if [ -n "$SSH_CONNECTION" ]; then
   else
     GREETING="Im tryna sleep, go awayyyyy"
   fi
-
+#the message over multiple lines
   MESSAGE="---SSH request detected---
 $TIME
 $GREETING
@@ -48,7 +48,7 @@ SSHing into: $SERVER_IP
 Port: $SERVER_PORT
 "
 
-  # Escape newlines for JSON
+  #packages the message up correctly so json doesnt go apeshit
   MESSAGE_ESCAPED=$(echo "$MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
   echo "Escaped message: $MESSAGE_ESCAPED" >> "$LOGFILE"
 
@@ -59,7 +59,7 @@ Port: $SERVER_PORT
        -d "{\"username\": \"$HOSTNAME\", \"content\": \"$MESSAGE_ESCAPED\"}" \
        "$WEBHOOK_URL" >> "$LOGFILE" 2>&1
 
-  echo "Curl finished at $(date)" >> "$LOGFILE"
+  echo "Curl finished at $(date)" >> "$LOGFILE"                  
 else
   echo "No SSH connection detected" >> "$LOGFILE"
 fi
