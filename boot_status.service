@@ -1,0 +1,11 @@
+[Unit]
+Description=Send system status to Discord on boot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/YOUR_USERNAME/pi_boot_status/boot_status.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
