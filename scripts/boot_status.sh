@@ -5,7 +5,7 @@ HOST=$(hostname)                     #gets the host name
 IP=$(hostname -I | awk '{print $1}') #finds ip address, the main one, usually starting with 10. if on eduroam
 echo "Hostname: $HOST and IP: $IP" >> "$LOGFILE"
 PORT=$(grep '^Port ' /etc/ssh/sshd_config | awk '{print $2}')
-echo "Obtained Port: $PORT" >> "LOGFILE"
+echo "Obtained Port: $PORT" >> "$LOGFILE"
 PORT=${PORT:-22}  # fallbacks to 22 if Port not found
 TIME=$(date '+%Y-%m-%d %H:%M:%S')
 HOUR=$(date +%H)                                         #finds the hours of the day for the custom messages
