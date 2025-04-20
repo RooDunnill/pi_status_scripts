@@ -1,14 +1,15 @@
 [Unit]
-Description=Send Discord message on shutdown
-DefaultDependencies=no
-Before=poweroff.target reboot.target halt.target
+Description=Send Discord message on shutdown or reboot
+After=multi-user.target
 
 [Service]
 Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/true
+ExecStop=__HOME__/pi_status_scripts/scripts/poweroff_status.sh
 User=__USER__
 Environment=HOME=__HOME__
-Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart=__HOME__/pi_status_scripts/scripts/poweroff_status.sh
+Environment=PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 [Install]
-WantedBy=halt.target reboot.target poweroff.target
+WantedBy=multi-user.target
