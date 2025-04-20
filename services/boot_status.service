@@ -8,7 +8,7 @@ Type=oneshot
 User=__USER__
 Environment=HOME=__HOME__
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart=__HOME__/scripts/pi_status_scripts/boot_status.sh
+ExecStart=__HOME__/pi_status_scripts/scripts/boot_status.sh
 
 [Install]
 WantedBy=multi-user.target
